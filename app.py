@@ -33,8 +33,8 @@ def populate2(filename,context):
 def home():
     return render_template('forms.html')
 
-# filenames = []
-# filename = ''
+filenames = []
+filename = ''
 # a post request to handle the file upload
 @app.route('/uploader', methods=['GET','POST'])
 def uploader():
@@ -42,7 +42,7 @@ def uploader():
         f = request.files['file1']
         filename = request.form.get("filename")
         f.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename)))
-        print(filenames)
+        print(filename)
         if filename in filenames:
             return 'already exists'
         else:
@@ -60,19 +60,16 @@ def inputypes():
     filename = request.form.get('filename')
     print(filename)
 
+
     doc = docx.Document('static/uploads/' + filename + '.docx')
  
-# read in each paragraph in file
-# result = [p.text for p in doc.paragraphs]
-# print(result)
 
-# for p in doc.paragraphs:
-    #     print(p.text)
 
     l=[]
 
     for p in doc.paragraphs:
         a=p.text
+        
         s=''
         for i in range(len(a)):
             if a[i]=='{' and a[i+1]=='{':
@@ -91,30 +88,7 @@ def inputypes():
 @app.route('/populate', methods=['GET','POST'])
 def populate():
     filename = request.form.get('filename')
-    # l = request.form[1:]
-    # filename='vendor-contract'
-    # document_path = Path(__file__).parent / ('static/uploads/' + filename + '.docx')
-    # doc = DocxTemplate(document_path)
-
-    # client = "Sven"
-    # vendor = "Tutorial Ltd."
-    # amount = 2105
-    # non_refundable = round(amount * 0.2, 2)
-    # line1 = "Some text goes here"
-    # line2 = "...and here goes some more text"
-    # today = datetime.datetime.today()
-    # today_in_one_week = today + datetime.timedelta(days=7)
-
-    # context = {
-    #     "CLIENT": client,
-    #     "VENDOR": vendor,
-    #     "LINE1": line1,
-    #     "LINE2": line2,
-    #     "AMOUNT": amount,
-    #     "NONREFUNDABLE": non_refundable,
-    #     "TODAY": today.strftime("%Y-%m-%d"),
-    #     "TODAY_IN_ONE_WEEK": today_in_one_week.strftime("%Y-%m-%d"),
-    # }
+    
     
     context={}
     cont = request.form
@@ -123,7 +97,4 @@ def populate():
     filename = request.form.get('filename')
     populate2(filename,context)
     return str(len(cont))
-    # doc.render(context)
-    # doc.save(Path(__file__).parent / f"{vendor}-contract.docx")
-
-    # return render_template('populate.html')
+    
